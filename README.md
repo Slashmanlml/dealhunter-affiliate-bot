@@ -1,35 +1,30 @@
-﻿# 🏷️ DealHunter Affiliate Bot — Cazador Automatizado de Ofertas y Errores de Precio
+# DealHunter Affiliate Bot
 
-![Bot Status](https://github.com/Slashmanlml/dealhunter-affiliate-bot/actions/workflows/deals.yml/badge.svg)
-![Business Model](https://img.shields.io/badge/Model-Affiliate_Commissions_(USD)-gold?style=flat)
-![NodeJS](https://img.shields.io/badge/Node.js-20.x-green?style=flat&logo=node.js)
-![Cloud Engine](https://img.shields.io/badge/Engine-GitHub_Actions_Cron-blue?style=flat&logo=githubactions)
+Detecta descuentos, arma el enlace con el identificador de afiliado y despacha la
+oferta por Telegram. Se ejecuta con cron de GitHub Actions.
 
-Bot autónomo de **Afiliación y Detección de Descuentos**. Monitorea tiendas de tecnología, electrónica y pasajes (Amazon, Tiendamia, Despegar), detecta caídas de precio superiores al 30% e inyecta enlaces de afiliados automáticos para publicar en canales de Telegram.
+> ### ⚠️ Estado: prototipo
+>
+> **No consulta ninguna tienda.** El módulo `src/deal-finder.js` devuelve un
+> conjunto fijo de ofertas de ejemplo. El formateo de enlaces de afiliado
+> (`src/affiliate-formatter.js`) y el despacho sí están implementados.
+>
+> Para conectarlo de verdad hace falta usar las APIs de afiliados de cada tienda
+> (Amazon Associates y equivalentes), que además exigen registro previo y tienen
+> reglas propias sobre cómo mostrar precios.
 
----
-
-## 💼 Modelo de Negocio (Monetización)
-
-```text
-[Monitoreo de Tiendas (Amazon / Tiendamia)]
-               │
-               ▼
-   [Detección de Caída de Precio > 35%]
-               │
-               ▼
-[Inyección de Enlace de Afiliado (?tag=...)]
-               │
-               ▼
-[Publicación en Canal de Telegram] ───► [Comprador] ───► [Comisión en USD (3% - 12%)]
-```
-
----
-
-## 💻 Ejecución Local
+## Uso
 
 ```bash
-git clone https://github.com/Slashmanlml/dealhunter-affiliate-bot.git
-cd dealhunter-affiliate-bot
 node index.js
 ```
+
+## Correcciones aplicadas
+
+- **La deduplicación ahora funciona.** Los ids se derivan del contenido
+  (`producto|tienda|precioOferta`) en vez de `Math.random()`.
+- **Ya no crashea al guardar.** Se crea `data/` antes de escribir.
+
+## Licencia
+
+MIT

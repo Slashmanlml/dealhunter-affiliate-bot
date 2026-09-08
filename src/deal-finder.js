@@ -1,15 +1,25 @@
-﻿const fs = require('fs');
+const crypto = require('crypto');
+const fs = require('fs');
 const path = require('path');
 
 const DB_FILE = path.join(__dirname, '..', 'data', 'ofertas_publicadas.json');
+
+/**
+ * Identidad estable derivada del contenido (producto, tienda, precioOferta).
+ * Antes se usaba Math.random(), asi que cada corrida generaba ids nuevos y el
+ * filtro de duplicados no filtraba nada: se re-despachaba todo en cada ejecucion.
+ */
+const buildId = item => 'DEAL-' + crypto.createHash('sha1')
+  .update([item.producto, item.tienda, item.precioOferta].join('|').toLowerCase())
+  .digest('hex').slice(0, 10);
 
 class DealFinder {
     async scanDeals() {
         console.log('🏷️ [DealHunter] Escaneando tiendas y detectando errores de precio y descuentos masivos...');
 
-        const currentDeals = [
+        const currentItems = [
             {
-                id: `DEAL-MACBOOK-${Math.floor(100 + Math.random() * 900)}`,
+                id: null, // se calcula abajo, a partir del contenido
                 producto: 'Apple MacBook Air M3 16GB RAM 512GB SSD',
                 tienda: 'Amazon',
                 precioOriginal: 1499,
@@ -21,7 +31,7 @@ class DealFinder {
                 fecha: new Date().toISOString()
             },
             {
-                id: `DEAL-SONY-${Math.floor(100 + Math.random() * 900)}`,
+                id: null, // se calcula abajo, a partir del contenido
                 producto: 'Auriculares Sony WH-1000XM5 Noise Cancelling',
                 tienda: 'Tiendamia',
                 precioOriginal: 399,
@@ -33,7 +43,7 @@ class DealFinder {
                 fecha: new Date().toISOString()
             },
             {
-                id: `DEAL-VUELO-${Math.floor(100 + Math.random() * 900)}`,
+                id: null, // se calcula abajo, a partir del contenido
                 producto: 'Vuelo Directo BsAs - Miami (Tarifa Error / Cupos Limitados)',
                 tienda: 'Despegar / Aerolíneas',
                 precioOriginal: 1100,
@@ -46,6 +56,11 @@ class DealFinder {
             }
         ];
 
+        // Identidad estable: sin esto la deduplicacion no puede funcionar.
+
+        currentItems.forEach(i => { i.id = buildId(i); });
+
+
         let historico = [];
         if (fs.existsSync(DB_FILE)) {
             try {
@@ -56,11 +71,12 @@ class DealFinder {
         }
 
         const idsVistos = new Set(historico.map(d => d.id));
-        const nuevasOfertas = currentDeals.filter(d => !idsVistos.has(d.id));
+        const nuevasOfertas = currentItems.filter(d => !idsVistos.has(d.id));
 
-        console.log(`📊 [DealHunter] Ofertas encontradas: ${currentDeals.length} | Nuevas para despachar: ${nuevasOfertas.length}`);
+        console.log(`📊 [DealHunter] Ofertas encontradas: ${currentItems.length} | Nuevas para despachar: ${nuevasOfertas.length}`);
 
         const actualizado = [...nuevasOfertas, ...historico].slice(0, 100);
+        fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
         fs.writeFileSync(DB_FILE, JSON.stringify(actualizado, null, 2), 'utf-8');
 
         return nuevasOfertas;
