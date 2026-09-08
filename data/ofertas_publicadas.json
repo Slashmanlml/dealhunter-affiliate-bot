@@ -1,0 +1,38 @@
+[
+  {
+    "id": "DEAL-68f833b63a",
+    "producto": "Apple MacBook Air M3 16GB RAM 512GB SSD",
+    "tienda": "Amazon",
+    "precioOriginal": 1499,
+    "precioOferta": 999,
+    "descuento": "33% OFF",
+    "moneda": "USD",
+    "linkBase": "https://amazon.com/dp/sample-macbook-m3",
+    "categoria": "TECNOLOGIA",
+    "fecha": "2026-09-08T22:47:48.722Z"
+  },
+  {
+    "id": "DEAL-f86e78fd71",
+    "producto": "Auriculares Sony WH-1000XM5 Noise Cancelling",
+    "tienda": "Tiendamia",
+    "precioOriginal": 399,
+    "precioOferta": 229,
+    "descuento": "42% OFF",
+    "moneda": "USD",
+    "linkBase": "https://tiendamia.com/producto/sample-sony-xm5",
+    "categoria": "AUDIO",
+    "fecha": "2026-09-08T22:47:48.722Z"
+  },
+  {
+    "id": "DEAL-da6b2e7479",
+    "producto": "Vuelo Directo BsAs - Miami (Tarifa Error / Cupos Limitados)",
+    "tienda": "Despegar / Aerolíneas",
+    "precioOriginal": 1100,
+    "precioOferta": 540,
+    "descuento": "51% OFF",
+    "moneda": "USD",
+    "linkBase": "https://despegar.com/vuelos/sample-miami-2026",
+    "categoria": "VIAJES",
+    "fecha": "2026-09-08T22:47:48.722Z"
+  }
+]
