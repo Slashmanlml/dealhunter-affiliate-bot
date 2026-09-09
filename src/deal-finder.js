@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const logger = require('./logger');
 
 const DB_FILE = path.join(__dirname, '..', 'data', 'ofertas_publicadas.json');
 
@@ -15,7 +16,7 @@ const buildId = item => 'DEAL-' + crypto.createHash('sha1')
 
 class DealFinder {
     async scanDeals() {
-        console.log('🏷️ [DealHunter] Escaneando tiendas y detectando errores de precio y descuentos masivos...');
+        logger.log('🏷️ [DealHunter] Escaneando tiendas y detectando errores de precio y descuentos masivos...');
 
         const currentItems = [
             {
@@ -73,7 +74,7 @@ class DealFinder {
         const idsVistos = new Set(historico.map(d => d.id));
         const nuevasOfertas = currentItems.filter(d => !idsVistos.has(d.id));
 
-        console.log(`📊 [DealHunter] Ofertas encontradas: ${currentItems.length} | Nuevas para despachar: ${nuevasOfertas.length}`);
+        logger.log(`📊 [DealHunter] Ofertas encontradas: ${currentItems.length} | Nuevas para despachar: ${nuevasOfertas.length}`);
 
         const actualizado = [...nuevasOfertas, ...historico].slice(0, 100);
         fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
@@ -84,3 +85,4 @@ class DealFinder {
 }
 
 module.exports = DealFinder;
+module.exports.buildId = buildId;
